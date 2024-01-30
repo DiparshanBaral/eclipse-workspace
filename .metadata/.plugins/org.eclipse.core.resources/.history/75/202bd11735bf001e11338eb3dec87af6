@@ -1,0 +1,114 @@
+package workshop10;
+
+import java.awt.EventQueue;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import java.awt.Font;
+import java.awt.Color;
+
+public class q1 {
+
+	private JFrame frame;
+	private JTextField first_name;
+	private JTextField last_name;
+	private JTextField email;
+	private JTextField password;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					q1 window = new q1();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public q1() {
+		initialize();
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 850, 700);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(128, 128, 255));
+		panel.setBounds(10, 10, 816, 63);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Sign up");
+		lblNewLabel.setFont(new Font("Nirmala UI", Font.PLAIN, 34));
+		lblNewLabel.setBounds(327, 10, 172, 43);
+		panel.add(lblNewLabel);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(10, 83, 803, 401);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("First Name:");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_1.setBounds(153, 37, 96, 24);
+		panel_1.add(lblNewLabel_1);
+		
+		first_name = new JTextField();
+		first_name.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		first_name.setBounds(153, 71, 509, 34);
+		panel_1.add(first_name);
+		first_name.setColumns(10);
+		
+		
+		last_name = new JTextField();
+		last_name.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		last_name.setBounds(153, 159, 509, 34);
+		panel_1.add(last_name);
+		last_name.setColumns(10);
+		
+		email = new JTextField();
+		email.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		email.setBounds(153, 253, 509, 34);
+		panel_1.add(email);
+		email.setColumns(10);
+		
+		password = new JTextField();
+		password.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		password.setBounds(153, 338, 509, 39);
+		panel_1.add(password);
+		password.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Last Name:");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_2.setBounds(153, 125, 96, 24);
+		panel_1.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Email:");
+		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_3.setBounds(153, 216, 96, 27);
+		panel_1.add(lblNewLabel_3);
+		
+		JLabel lblNewLabel_4 = new JLabel("Password:");
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblNewLabel_4.setBounds(153, 297, 96, 31);
+		panel_1.add(lblNewLabel_4);
+	}
+}
