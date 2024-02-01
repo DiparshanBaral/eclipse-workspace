@@ -60,7 +60,7 @@ public class q2 {
         panel.add(lblNewLabel);
 
         JPanel panel_1 = new JPanel();
-        panel_1.setBounds(10, 85, 816, 340);
+        panel_1.setBounds(10, 85, 816, 364);
         frame.getContentPane().add(panel_1);
         panel_1.setLayout(null);
 
