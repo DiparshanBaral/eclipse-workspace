@@ -1,4 +1,4 @@
-package backend;
+package gui;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -11,6 +11,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+
+import gui.login;
+
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.Cursor;
@@ -18,7 +21,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Image;
 import javax.swing.JPasswordField;
-import backend.login;
 
 public class signup {
 
