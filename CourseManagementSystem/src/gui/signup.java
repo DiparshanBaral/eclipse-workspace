@@ -29,7 +29,8 @@ public class signup {
 	private JTextField lastName;
 	private JTextField email;
 	private JPasswordField passwordField;
-	private JPasswordField passwordField_1;
+	private JPasswordField confirmPassword;
+	private JTextField phone;
 
 	/**
 	 * Launch the application.
@@ -65,7 +66,7 @@ public class signup {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(176, 196, 222));
-		panel.setBounds(34, 27, 1302, 108);
+		panel.setBounds(34, 10, 1302, 108);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
@@ -75,7 +76,7 @@ public class signup {
 		panel.add(lblNewLabel);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(291, 145, 946, 556);
+		panel_1.setBounds(289, 128, 946, 585);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -91,17 +92,17 @@ public class signup {
 		
 		JLabel emaillabel = new JLabel("Email:");
 		emaillabel.setFont(new Font("Garamond", Font.PLAIN, 24));
-		emaillabel.setBounds(105, 144, 126, 37);
+		emaillabel.setBounds(105, 132, 126, 37);
 		panel_1.add(emaillabel);
 		
 		JLabel passwordlabel = new JLabel("Password:");
 		passwordlabel.setFont(new Font("Garamond", Font.PLAIN, 24));
-		passwordlabel.setBounds(105, 226, 126, 37);
+		passwordlabel.setBounds(105, 214, 126, 37);
 		panel_1.add(passwordlabel);
 		
 		JLabel cpasswordlabel = new JLabel("Confirm Password:");
 		cpasswordlabel.setFont(new Font("Garamond", Font.PLAIN, 24));
-		cpasswordlabel.setBounds(105, 315, 192, 37);
+		cpasswordlabel.setBounds(105, 297, 192, 37);
 		panel_1.add(cpasswordlabel);
 		
 		firstName = new JTextField();
@@ -119,7 +120,7 @@ public class signup {
 		email = new JTextField();
 		email.setFont(new Font("Garamond", Font.PLAIN, 22));
 		email.setColumns(10);
-		email.setBounds(105, 179, 452, 37);
+		email.setBounds(105, 167, 452, 37);
 		panel_1.add(email);
 		
 		JButton btnNewButton = new JButton("Create my account");
@@ -127,7 +128,7 @@ public class signup {
 		btnNewButton.setBackground(new Color(134, 85, 236));
 		btnNewButton.setFont(new Font("Garamond", Font.PLAIN, 21));
 		btnNewButton.setIcon(null);
-		btnNewButton.setBounds(105, 434, 192, 37);
+		btnNewButton.setBounds(105, 488, 192, 37);
 		panel_1.add(btnNewButton);
 		
 		JLabel lblNewLabel_1 = new JLabel("Select User Mode:");
@@ -144,23 +145,42 @@ public class signup {
 		
 		JLabel lblAlreadyHaveAn = new JLabel("Already have an account?");
 		lblAlreadyHaveAn.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblAlreadyHaveAn.setBounds(105, 496, 252, 37);
+		lblAlreadyHaveAn.setBounds(105, 538, 252, 37);
 		panel_1.add(lblAlreadyHaveAn);
 		
 		JLabel lblSignIn = new JLabel("Sign In");
         lblSignIn.setFont(new Font("Garamond", Font.PLAIN, 24));
-        lblSignIn.setBounds(353, 496, 76, 37);
+        lblSignIn.setBounds(352, 538, 76, 37);
         lblSignIn.setForeground(Color.BLUE); // Set color to blue for indication of hyperlink
         lblSignIn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Set cursor to hand when hovered
         panel_1.add(lblSignIn);
         
         passwordField = new JPasswordField();
-        passwordField.setBounds(105, 273, 452, 37);
+        passwordField.setBounds(105, 250, 452, 37);
         panel_1.add(passwordField);
         
-        passwordField_1 = new JPasswordField();
-        passwordField_1.setBounds(105, 362, 452, 37);
-        panel_1.add(passwordField_1);
+        confirmPassword = new JPasswordField();
+        confirmPassword.setBounds(105, 344, 452, 37);
+        panel_1.add(confirmPassword);
+        
+        JLabel lblNewLabel_2 = new JLabel("Phone:");
+        lblNewLabel_2.setFont(new Font("Garamond", Font.PLAIN, 24));
+        lblNewLabel_2.setBounds(105, 391, 192, 37);
+        panel_1.add(lblNewLabel_2);
+        
+        phone = new JTextField();
+        phone.setBounds(105, 427, 452, 37);
+        panel_1.add(phone);
+        phone.setColumns(10);
+        
+        JLabel lblNewLabel_3 = new JLabel("Select Course:");
+        lblNewLabel_3.setFont(new Font("Garamond", Font.PLAIN, 24));
+        lblNewLabel_3.setBounds(453, 10, 134, 30);
+        panel_1.add(lblNewLabel_3);
+        
+        JComboBox courseChoose = new JComboBox();
+        courseChoose.setBounds(597, 13, 171, 30);
+        panel_1.add(courseChoose);
 
         lblSignIn.addMouseListener(new MouseAdapter() {
             @Override
