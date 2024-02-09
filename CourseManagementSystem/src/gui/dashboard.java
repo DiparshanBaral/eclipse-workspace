@@ -1,49 +1,47 @@
 package gui;
 
 import java.awt.EventQueue;
+
 import javax.swing.JButton;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Desktop;
+
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.Image;
-
 import javax.swing.UIManager;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
-import javax.swing.border.LineBorder;
 import java.awt.SystemColor;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.JComboBox;
-import javax.swing.JTextArea;
-import javax.swing.JSlider;
-import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.CardLayout;
-import javax.swing.JEditorPane;
 import javax.swing.JTextField;
 import javax.swing.Icon;
 
 public class dashboard {
 
-	private JFrame frame;
-	private JTable table;
-	private JTable table_1;
+	JFrame frame;
 	private JTable table_2;
 	private JTextField courseSearch;
 	private JTextField studentSearch;
+	private JPanel mainPanel;
+	private Desktop desktop;
+	private CardLayout cardLayout = new CardLayout(0, 0);
+	private JTextField oldPassword;
+	private JTextField textField;
+
 
 	/**
 	 * Launch the application.
+	 * @wbp.parser.entryPoint
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -60,6 +58,8 @@ public class dashboard {
 
 	/**
 	 * Create the application.
+	 * @wbp.parser.entryPoint
+	 * @return 
 	 */
 	public dashboard() {
 		initialize();
@@ -69,7 +69,7 @@ public class dashboard {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		CardLayout cardLayout = new CardLayout();
+		cardLayout = new CardLayout();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1360, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,49 +81,20 @@ public class dashboard {
 		frame.getContentPane().add(sidePanel);
 		sidePanel.setLayout(null);
 		
-		JButton dashButton = new JButton("Dashboard");
-		dashButton.setBackground(new Color(255, 250, 250));
-		dashButton.setIcon(new ImageIcon(getClass().getResource("/gui/images/dashboard.png")));
-		dashButton.setFont(new Font("Garamond", Font.PLAIN, 24));
-		dashButton.setBounds(45, 35, 187, 47);
-		sidePanel.add(dashButton);
-		
-		JButton coursebtn = new JButton("Course");
-		coursebtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cardLayout.show(container, "course");
-			}
-		});
-		coursebtn.setBackground(new Color(255, 250, 250));
-		coursebtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/course.png")));
-		coursebtn.setFont(new Font("Garamond", Font.PLAIN, 24));
-		coursebtn.setBounds(45, 92, 187, 47);
-		sidePanel.add(coursebtn);
-
-		
-		JButton tutorsButton = new JButton("Tutors");
-		tutorsButton.setBackground(new Color(255, 250, 250));
-		tutorsButton.setIcon(new ImageIcon(getClass().getResource("/gui/images/person.png")));
-		tutorsButton.setFont(new Font("Garamond", Font.PLAIN, 24));
-		tutorsButton.setBounds(45, 149, 187, 47);
-		sidePanel.add(tutorsButton);
-
-		
-		JButton studentbtn = new JButton("Students");
-		studentbtn.setBackground(new Color(255, 250, 250));
-		studentbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/person.png")));
-		studentbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
-		studentbtn.setBounds(45, 206, 187, 47);
-		sidePanel.add(studentbtn);
-		
-		JButton settingbtn = new JButton("Settings");
-		settingbtn.setBackground(new Color(255, 250, 250));
-		settingbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/setting.png")));
-		settingbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
-		settingbtn.setBounds(45, 263, 187, 47);
-		sidePanel.add(settingbtn);
 		
 		JButton mailbtn = new JButton("Mail");
+		mailbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				desktop = Desktop.getDesktop();
+
+				try {
+					desktop.browse(new URI("https://gmail.com/"));
+				} catch (IOException | URISyntaxException e1) {
+
+					e1.printStackTrace();
+				}
+			}
+		});
 		mailbtn.setBackground(new Color(255, 250, 250));
 		mailbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/mail.png")));
 		mailbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
@@ -131,13 +102,19 @@ public class dashboard {
 		sidePanel.add(mailbtn);
 		
 		JButton logoutbtn = new JButton("Log Out");
+		logoutbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        login loginWindow = new login();
+		        loginWindow.frame.setVisible(true);
+		        frame.dispose();
+			}
+		});
 		logoutbtn.setBackground(new Color(255, 250, 250));
 		logoutbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/logout.png")));
 		logoutbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
 		logoutbtn.setBounds(45, 377, 187, 47);
 		sidePanel.add(logoutbtn);
 
-		
 		
 		JPanel cmsPanel = new JPanel();
 		cmsPanel.setBackground(new Color(211, 211, 211));
@@ -161,14 +138,28 @@ public class dashboard {
 		lblNewLabel_1_1_1.setBounds(59, 100, 114, 40);
 		cmsPanel.add(lblNewLabel_1_1_1);
 		
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainPanel.setBounds(282, 10, 1054, 693);
 		frame.getContentPane().add(mainPanel);
-		mainPanel.setLayout(new CardLayout(0, 0));
+		mainPanel.setLayout(cardLayout);
 		
 		JPanel dashPanel = new JPanel();
 		mainPanel.add(dashPanel, "name_81620814996000");
 		dashPanel.setLayout(null);
+		
+		JButton dashButton = new JButton("Dashboard");
+		dashButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(mainPanel, "name_81620814996000");
+	            frame.revalidate();
+				frame.repaint();
+			}
+		});
+        dashButton.setBackground(new Color(255, 250, 250));
+        dashButton.setIcon(new ImageIcon(getClass().getResource("/gui/images/dashboard.png")));
+        dashButton.setFont(new Font("Garamond", Font.PLAIN, 24));
+        dashButton.setBounds(45, 35, 187, 47);
+        sidePanel.add(dashButton);
 		
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(null);
@@ -281,6 +272,20 @@ public class dashboard {
 		mainPanel.add(coursePanel, "name_81646405971000");
 		coursePanel.setLayout(null);
 		
+		JButton coursebtn = new JButton("Course");
+		coursebtn.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	cardLayout.show(mainPanel, "name_81646405971000");
+		    	
+	            frame.revalidate();
+		    }
+		});
+		coursebtn.setBackground(new Color(255, 250, 250));
+		coursebtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/course.png")));
+		coursebtn.setFont(new Font("Garamond", Font.PLAIN, 24));
+		coursebtn.setBounds(45, 92, 187, 47);
+		sidePanel.add(coursebtn);
+		
 		JPanel headerPanel_1 = new JPanel();
 		headerPanel_1.setLayout(null);
 		headerPanel_1.setBackground(new Color(142, 172, 205));
@@ -331,6 +336,19 @@ public class dashboard {
 		mainPanel.add(studentPanel, "name_81682433354600");
 		studentPanel.setLayout(null);
 		
+		JButton studentbtn = new JButton("Students");
+		studentbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(mainPanel, "name_81682433354600");
+	            frame.revalidate();
+			}
+		});
+		studentbtn.setBackground(new Color(255, 250, 250));
+		studentbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/person.png")));
+		studentbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
+		studentbtn.setBounds(45, 206, 187, 47);
+		sidePanel.add(studentbtn);
+		
 		JPanel headerPanel_2 = new JPanel();
 		headerPanel_2.setLayout(null);
 		headerPanel_2.setBackground(new Color(142, 172, 205));
@@ -380,6 +398,19 @@ public class dashboard {
 		mainPanel.add(setingsPanel, "name_81696700830100");
 		setingsPanel.setLayout(null);
 		
+		JButton settingbtn = new JButton("Settings");
+		settingbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(mainPanel, "name_81696700830100");
+	            frame.revalidate();
+			}
+		});
+		settingbtn.setBackground(new Color(255, 250, 250));
+		settingbtn.setIcon(new ImageIcon(getClass().getResource("/gui/images/setting.png")));
+		settingbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
+		settingbtn.setBounds(45, 263, 187, 47);
+		sidePanel.add(settingbtn);
+		
 		JPanel headerPanel_4 = new JPanel();
 		headerPanel_4.setLayout(null);
 		headerPanel_4.setBackground(new Color(142, 172, 205));
@@ -391,9 +422,116 @@ public class dashboard {
 		lblSettings.setBounds(306, 10, 177, 40);
 		headerPanel_4.add(lblSettings);
 		
+		JLabel lblNewLabel_5 = new JLabel("General Profile");
+		lblNewLabel_5.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_5.setBounds(10, 70, 154, 34);
+		setingsPanel.add(lblNewLabel_5);
+		
+		JLabel lblNewLabel_8 = new JLabel("First Name:");
+		lblNewLabel_8.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_8.setBounds(10, 131, 112, 27);
+		setingsPanel.add(lblNewLabel_8);
+		
+		JLabel FirstName = new JLabel("");
+		FirstName.setBackground(new Color(255, 250, 250));
+		FirstName.setFont(new Font("Garamond", Font.PLAIN, 24));
+		FirstName.setBounds(139, 131, 213, 27);
+		setingsPanel.add(FirstName);
+		FirstName.setBorder(UIManager.getBorder("ToolTip.border"));
+		
+		JLabel lblNewLabel_9 = new JLabel("Email:");
+		lblNewLabel_9.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_9.setBounds(10, 198, 93, 27);
+		setingsPanel.add(lblNewLabel_9);
+		
+		JLabel email = new JLabel("");
+		email.setFont(new Font("Garamond", Font.PLAIN, 24));
+		email.setBounds(139, 198, 213, 27);
+		setingsPanel.add(email);
+		email.setBorder(UIManager.getBorder("ToolTip.border"));
+		
+		JLabel lblNewLabel_10 = new JLabel("Last Name:");
+		lblNewLabel_10.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_10.setBounds(505, 131, 123, 27);
+		setingsPanel.add(lblNewLabel_10);
+		
+		JLabel LastName = new JLabel("");
+		LastName.setFont(new Font("Garamond", Font.PLAIN, 24));
+		LastName.setBounds(637, 131, 213, 29);
+		setingsPanel.add(LastName);
+		LastName.setBorder(UIManager.getBorder("ToolTip.border"));
+		
+		JLabel lblNewLabel_11 = new JLabel("Phone No.");
+		lblNewLabel_11.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_11.setBounds(505, 198, 103, 27);
+		setingsPanel.add(lblNewLabel_11);
+		
+		JLabel PhoneNo = new JLabel("");
+		PhoneNo.setFont(new Font("Garamond", Font.PLAIN, 24));
+		PhoneNo.setBounds(637, 198, 213, 27);
+		setingsPanel.add(PhoneNo);
+		PhoneNo.setBorder(UIManager.getBorder("ToolTip.border"));
+		
+		JButton editProfile = new JButton("Edit Profile");
+		editProfile.setFont(new Font("Garamond", Font.PLAIN, 21));
+		editProfile.setBounds(10, 259, 143, 34);
+		setingsPanel.add(editProfile);
+		
+		JLabel lblNewLabel_12 = new JLabel("Security & Login");
+		lblNewLabel_12.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_12.setBounds(10, 324, 169, 34);
+		setingsPanel.add(lblNewLabel_12);
+		
+		JLabel lblNewLabel_13 = new JLabel("Old Password:");
+		lblNewLabel_13.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_13.setBounds(10, 392, 143, 27);
+		setingsPanel.add(lblNewLabel_13);
+		
+		oldPassword = new JTextField();
+		oldPassword.setBounds(166, 392, 234, 27);
+		setingsPanel.add(oldPassword);
+		oldPassword.setColumns(10);
+		
+		JLabel lblNewLabel_14 = new JLabel("New Password:");
+		lblNewLabel_14.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_14.setBounds(505, 392, 154, 27);
+		setingsPanel.add(lblNewLabel_14);
+		
+		textField = new JTextField();
+		textField.setBounds(669, 392, 234, 27);
+		setingsPanel.add(textField);
+		textField.setColumns(10);
+		
+		JButton changePassword = new JButton("Change Password");
+		changePassword.setFont(new Font("Garamond", Font.PLAIN, 21));
+		changePassword.setBounds(10, 452, 197, 27);
+		setingsPanel.add(changePassword);
+		
+		JButton btnNewButton = new JButton("Create Student Report");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setFont(new Font("Garamond", Font.PLAIN, 22));
+		btnNewButton.setBounds(10, 502, 241, 34);
+		setingsPanel.add(btnNewButton);
+		
 		JPanel tutorPanel = new JPanel();
 		mainPanel.add(tutorPanel, "name_81912417026100");
 		tutorPanel.setLayout(null);
+		
+		JButton tutorsButton = new JButton("Tutors");
+		tutorsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(mainPanel, "name_81912417026100");
+	            frame.revalidate();
+			}
+		});
+		tutorsButton.setBackground(new Color(255, 250, 250));
+		tutorsButton.setIcon(new ImageIcon(getClass().getResource("/gui/images/person.png")));
+		tutorsButton.setFont(new Font("Garamond", Font.PLAIN, 24));
+		tutorsButton.setBounds(45, 149, 187, 47);
+		sidePanel.add(tutorsButton);
 		
 		JPanel headerPanel_3 = new JPanel();
 		headerPanel_3.setLayout(null);

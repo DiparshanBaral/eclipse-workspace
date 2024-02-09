@@ -5,21 +5,14 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
-
-import gui.login;
-
 import java.awt.Color;
 import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Image;
 import javax.swing.JPasswordField;
 
 public class signup {

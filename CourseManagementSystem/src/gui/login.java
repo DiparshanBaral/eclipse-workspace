@@ -1,13 +1,11 @@
 package gui;
 
 import java.awt.EventQueue;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
@@ -16,7 +14,6 @@ import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.Image;
 import javax.swing.JPasswordField;
 
 public class login {
@@ -63,6 +60,7 @@ public class login {
 		panel.setBounds(34, 27, 1302, 108);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
+		
 		
 		JLabel lblNewLabel = new JLabel("Welcome to login page");
 		lblNewLabel.setBounds(461, 25, 371, 45);
