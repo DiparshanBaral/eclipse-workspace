@@ -5,15 +5,28 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import courses.Result;
+import exception.NullException;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
 
-public class ViewProgress {
+public class ViewProgress{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField progressReportID;
+	private JTable table;
 
 	/**
 	 * Launch the application.
@@ -70,8 +83,45 @@ public class ViewProgress {
 		progressReportID.setColumns(10);
 		
 		JButton btnNewButton = new JButton("View");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+                    int id = Integer.parseInt(progressReportID.getText());
+                    displayResultsInTable(id);
+                } catch (NullException | NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Fill the empty box!!", "Error!", JOptionPane.WARNING_MESSAGE);
+                }
+			}
+		});
 		btnNewButton.setFont(new Font("Garamond", Font.PLAIN, 24));
 		btnNewButton.setBounds(393, 231, 136, 31);
 		frame.getContentPane().add(btnNewButton);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(247, 345, 679, 347);
+		frame.getContentPane().add(scrollPane);
+		
+		table = new JTable();
+		table.setFont(new Font("Garamond", Font.PLAIN, 24));
+		scrollPane.setViewportView(table);
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Module", "Marks"
+			}
+		));
+		table.setRowHeight(30);
 	}
+	private void displayResultsInTable(int student_id) {
+        Result result = new Result();
+        ArrayList<Result> resultList = result.displayResult(student_id);
+
+        DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
+        tableModel.setRowCount(0); // Clear existing rows
+
+        for (Result res : resultList) {
+            tableModel.addRow(new Object[] { res.moduleName, res.marks });
+        }
+    }
 }

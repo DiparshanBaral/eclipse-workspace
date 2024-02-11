@@ -8,11 +8,16 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import courses.CRUDCourse;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class EditStudent {
+public class EditStudent{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField editStudentID;
 	private JTextField editStudentName;
 	private JTextField editStudentPhone;
@@ -102,8 +107,19 @@ public class EditStudent {
 		frame.getContentPane().add(editStudentEmail);
 		
 		JButton btnUpdateStudent = new JButton("Update Student");
+		btnUpdateStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CRUDCourse c = new CRUDCourse();
+		        int si = Integer.parseInt(editStudentID.getText());
+		        String sn = editStudentName.getText();
+		        String sp = editStudentPhone.getText();
+		        String se = editStudentEmail.getText();
+		        c.updateStudent(si, sn, sp, se);
+		        frame.dispose();
+			}
+		});
 		btnUpdateStudent.setFont(new Font("Garamond", Font.PLAIN, 24));
-		btnUpdateStudent.setBounds(379, 621, 173, 36);
+		btnUpdateStudent.setBounds(379, 621, 215, 36);
 		frame.getContentPane().add(btnUpdateStudent);
 	}
 

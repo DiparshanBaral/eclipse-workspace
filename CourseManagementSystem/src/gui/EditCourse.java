@@ -8,14 +8,18 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import courses.CRUDCourse;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class EditCourse {
+public class EditCourse{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField courseID;
 	private JTextField courseName;
-	private JTextField TotalSeats;
 
 	/**
 	 * Launch the application.
@@ -70,11 +74,6 @@ public class EditCourse {
 		lblNewLabel_1_1.setBounds(400, 267, 202, 36);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
-		JLabel lblNewLabel_1_2 = new JLabel("Total Seats Available:");
-		lblNewLabel_1_2.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_1_2.setBounds(400, 390, 202, 36);
-		frame.getContentPane().add(lblNewLabel_1_2);
-		
 		courseID = new JTextField();
 		courseID.setBounds(400, 201, 314, 42);
 		frame.getContentPane().add(courseID);
@@ -85,14 +84,19 @@ public class EditCourse {
 		courseName.setBounds(400, 325, 314, 42);
 		frame.getContentPane().add(courseName);
 		
-		TotalSeats = new JTextField();
-		TotalSeats.setColumns(10);
-		TotalSeats.setBounds(400, 450, 314, 42);
-		frame.getContentPane().add(TotalSeats);
-		
 		JButton updateCoursebtn = new JButton("Update Course");
+		updateCoursebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CRUDCourse c = new CRUDCourse();
+		        String cn = courseName.getText();
+		        int ci = Integer.parseInt(courseID.getText());
+		        c.updateCourse(ci, cn);
+		        frame.dispose();
+		        
+			}
+		});
 		updateCoursebtn.setFont(new Font("Garamond", Font.PLAIN, 24));
-		updateCoursebtn.setBounds(469, 537, 173, 36);
+		updateCoursebtn.setBounds(463, 407, 173, 36);
 		frame.getContentPane().add(updateCoursebtn);
 	}
 }

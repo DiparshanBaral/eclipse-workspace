@@ -4,17 +4,24 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import courses.CRUDCourse;
+import exception.NullException;
+
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AddCourse {
+public class AddCourse{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField CourseName;
-	private JTextField Batch;
 	private JTextField FirstModule1;
 	private JTextField FirstModule2;
 	private JTextField FirstModule3;
@@ -52,6 +59,7 @@ public class AddCourse {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1360, 750);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,11 +69,6 @@ public class AddCourse {
 		lblNewLabel_1.setFont(new Font("Garamond", Font.PLAIN, 24));
 		lblNewLabel_1.setBounds(60, 92, 147, 31);
 		frame.getContentPane().add(lblNewLabel_1);
-		
-		JLabel NoofSeats = new JLabel("No. of Seats:");
-		NoofSeats.setFont(new Font("Garamond", Font.PLAIN, 24));
-		NoofSeats.setBounds(416, 92, 157, 31);
-		frame.getContentPane().add(NoofSeats);
 		
 		JLabel lblNewLabel_1_1_2 = new JLabel("1st Year");
 		lblNewLabel_1_1_2.setFont(new Font("Garamond", Font.BOLD, 30));
@@ -132,11 +135,6 @@ public class AddCourse {
 		frame.getContentPane().add(CourseName);
 		CourseName.setColumns(10);
 		
-		Batch = new JTextField();
-		Batch.setColumns(10);
-		Batch.setBounds(416, 133, 234, 31);
-		frame.getContentPane().add(Batch);
-		
 		FirstModule1 = new JTextField();
 		FirstModule1.setColumns(10);
 		FirstModule1.setBounds(60, 322, 234, 31);
@@ -195,6 +193,31 @@ public class AddCourse {
 		panel.add(lblNewLabel);
 		
 		JButton addCoursebtn = new JButton("Add");
+		addCoursebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CRUDCourse c = new CRUDCourse();
+		        String cn = CourseName.getText();
+		        try {
+		        	c.createCourse(cn);
+		            
+		            int fixedCourseId = 4;
+
+		            // Call the function to create modules with the fixed courseId
+		            JTextField[] moduleTextFields = {
+		                    FirstModule1, FirstModule2, FirstModule3,
+		                    SecondModule1, SecondModule2, SecondModule3,
+		                    ThirdModule1, ThirdModule2, ThirdModule3
+		            };
+		            c.createModules(fixedCourseId, moduleTextFields);
+		            
+		            
+
+		        } catch (NullException e2) {
+		            JOptionPane.showMessageDialog(null, "Please Fill the Box");
+		        }
+		        frame.dispose();
+			}
+		});
 		addCoursebtn.setBounds(1081, 10, 189, 43);
 		panel.add(addCoursebtn);
 		addCoursebtn.setFont(new Font("Garamond", Font.PLAIN, 30));

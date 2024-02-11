@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -10,13 +11,20 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
+import backend.Validation;
+import users.Tutor;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
+
 public class AddTutor {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField tutorsName;
-	private JTextField tutorsID;
 	private JTextField tutorsPhone;
 	private JTextField tutorsEmail;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -62,11 +70,6 @@ public class AddTutor {
 		lblAddTutor.setBounds(514, 5, 284, 70);
 		panel.add(lblAddTutor);
 		
-		JButton addTutorbtn = new JButton("Add");
-		addTutorbtn.setFont(new Font("Garamond", Font.PLAIN, 30));
-		addTutorbtn.setBounds(1081, 10, 189, 43);
-		panel.add(addTutorbtn);
-		
 		JLabel lblNewLabel = new JLabel("Tutors Name:");
 		lblNewLabel.setFont(new Font("Garamond", Font.PLAIN, 24));
 		lblNewLabel.setBounds(432, 147, 234, 37);
@@ -77,35 +80,48 @@ public class AddTutor {
 		frame.getContentPane().add(tutorsName);
 		tutorsName.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("Tutors ID:");
-		lblNewLabel_1.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_1.setBounds(432, 264, 234, 37);
-		frame.getContentPane().add(lblNewLabel_1);
-		
-		tutorsID = new JTextField();
-		tutorsID.setBounds(432, 315, 266, 31);
-		frame.getContentPane().add(tutorsID);
-		tutorsID.setColumns(10);
-		
 		JLabel lblNewLabel_2 = new JLabel("Tutors Phone:");
 		lblNewLabel_2.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_2.setBounds(432, 388, 191, 37);
+		lblNewLabel_2.setBounds(432, 235, 191, 37);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		tutorsPhone = new JTextField();
-		tutorsPhone.setBounds(432, 435, 266, 31);
+		tutorsPhone.setBounds(432, 282, 266, 31);
 		frame.getContentPane().add(tutorsPhone);
 		tutorsPhone.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Tutors Email:");
 		lblNewLabel_3.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_3.setBounds(432, 498, 208, 31);
+		lblNewLabel_3.setBounds(432, 326, 208, 31);
 		frame.getContentPane().add(lblNewLabel_3);
 		
 		tutorsEmail = new JTextField();
-		tutorsEmail.setBounds(432, 550, 266, 31);
+		tutorsEmail.setBounds(432, 367, 266, 31);
 		frame.getContentPane().add(tutorsEmail);
 		tutorsEmail.setColumns(10);
+		
+		JButton addTutorbtn = new JButton("Add");
+		addTutorbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String pass = new String(passwordField.getPassword());
+				Tutor i = new Tutor();
+				if(Validation.validateEmail(tutorsEmail.getText())&&Validation.validatePassword(pass)&& Validation.validatePhoneNumber(tutorsPhone.getText())) {
+					i.addtutor(tutorsName.getText(), tutorsEmail.getText(), tutorsPhone.getText(), pass);
+				}
+				frame.dispose();
+			}
+		});
+		addTutorbtn.setBounds(432, 560, 189, 43);
+		frame.getContentPane().add(addTutorbtn);
+		addTutorbtn.setFont(new Font("Garamond", Font.PLAIN, 30));
+		
+		JLabel lblNewLabel_2_1 = new JLabel("Tutors Password:");
+		lblNewLabel_2_1.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_2_1.setBounds(432, 408, 191, 37);
+		frame.getContentPane().add(lblNewLabel_2_1);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(432, 471, 266, 31);
+		frame.getContentPane().add(passwordField);
 	}
-
 }

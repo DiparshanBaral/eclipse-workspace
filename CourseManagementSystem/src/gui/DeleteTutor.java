@@ -8,11 +8,16 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+
+import courses.CRUDCourse;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DeleteTutor {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField deletetutorfield;
 
 	/**
@@ -69,6 +74,15 @@ public class DeleteTutor {
 		frame.getContentPane().add(deletetutorfield);
 		
 		JButton deleteTutorbtn = new JButton("Delete");
+		deleteTutorbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CRUDCourse c = new CRUDCourse();
+		        
+		        int ci = Integer.parseInt(deletetutorfield.getText());
+		        c.deleteTutor(ci);
+		        frame.dispose();
+			}
+		});
 		deleteTutorbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
 		deleteTutorbtn.setBounds(188, 243, 111, 31);
 		frame.getContentPane().add(deleteTutorbtn);

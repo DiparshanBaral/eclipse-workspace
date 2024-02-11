@@ -10,10 +10,10 @@ public class DBconnection {
 	public Connection load() {
 		
 		// driver loading
-		databaseMGMT db = new databaseMGMT();
+		DatabaseMGMT db = new DatabaseMGMT();
 		 db.setUrl("jdbc:mysql://localhost:3307/cms");
 		 db.setUsername("root");
-		 db.setPassword("");
+		 db.setPassword("1234567890");
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			Connection connect = DriverManager.getConnection(db.getUrl(), db.getUsername(), db.getPassword());

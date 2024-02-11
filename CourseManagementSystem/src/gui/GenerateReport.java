@@ -2,19 +2,29 @@ package gui;
 
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import exception.InvalidMarks;
+import users.Tutor;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 
-public class GenerateReport {
+public class GenerateReport{
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField ResultStudentID;
-	private JTextField ReaultModuleName;
+	private JTextField ResultModuleID;
 	private JTextField ResultPercentage;
 
 	/**
@@ -70,15 +80,15 @@ public class GenerateReport {
 		ResultStudentID.setBounds(370, 193, 375, 38);
 		frame.getContentPane().add(ResultStudentID);
 		
-		JLabel lblNewLabel_2 = new JLabel("Enter Module Name:");
+		JLabel lblNewLabel_2 = new JLabel("Enter Module ID:");
 		lblNewLabel_2.setFont(new Font("Garamond", Font.PLAIN, 24));
 		lblNewLabel_2.setBounds(370, 259, 264, 38);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		ReaultModuleName = new JTextField();
-		ReaultModuleName.setBounds(370, 311, 375, 38);
-		frame.getContentPane().add(ReaultModuleName);
-		ReaultModuleName.setColumns(10);
+		ResultModuleID = new JTextField();
+		ResultModuleID.setBounds(370, 311, 375, 38);
+		frame.getContentPane().add(ResultModuleID);
+		ResultModuleID.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel("Enter Percentage:");
 		lblNewLabel_3.setFont(new Font("Garamond", Font.PLAIN, 24));
@@ -91,6 +101,21 @@ public class GenerateReport {
 		ResultPercentage.setColumns(10);
 		
 		JButton UploadResultbtn = new JButton("Upload Result");
+		UploadResultbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Tutor i = new Tutor();
+				int s = Integer.parseInt(ResultStudentID.getText().trim());
+				int m = Integer.parseInt(ResultModuleID.getText().trim());
+				int mark = Integer.parseInt(ResultPercentage.getText().trim());
+				try {
+					i.generateReport(s, m, mark);
+				}catch(InvalidMarks | SQLException e1) {
+					  JOptionPane.showMessageDialog(null, "Something went wrong!",
+			                    "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				frame.dispose();
+			}
+		});
 		UploadResultbtn.setFont(new Font("Garamond", Font.PLAIN, 24));
 		UploadResultbtn.setBounds(370, 508, 209, 38);
 		frame.getContentPane().add(UploadResultbtn);

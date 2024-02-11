@@ -8,11 +8,16 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
+
+import courses.CRUDCourse;
+
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class DeleteCourse {
 
-	private JFrame frame;
+	JFrame frame;
 	private JTextField deleteCoursefield;
 
 	/**
@@ -24,10 +29,13 @@ public class DeleteCourse {
 				try {
 					DeleteCourse window = new DeleteCourse();
 					window.frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
 			}
+			
 		});
 	}
 
@@ -69,6 +77,15 @@ public class DeleteCourse {
 		deleteCoursefield.setColumns(10);
 		
 		JButton deleteCoursebtn = new JButton("Delete");
+		deleteCoursebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CRUDCourse c = new CRUDCourse();
+		        
+		        int ci = Integer.parseInt(deleteCoursefield.getText());
+		        c.deleteCourse(ci);
+		        frame.dispose();
+			}
+		});
 		deleteCoursebtn.setFont(new Font("Garamond", Font.PLAIN, 24));
 		deleteCoursebtn.setBounds(195, 241, 111, 31);
 		frame.getContentPane().add(deleteCoursebtn);

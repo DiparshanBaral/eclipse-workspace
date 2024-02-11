@@ -2,10 +2,15 @@ package gui;
 
 import java.awt.EventQueue;
 
+
+
+
 import javax.swing.JButton;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import java.awt.Color;
 import java.awt.Desktop;
 
@@ -17,10 +22,23 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Connection;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import backend.activities;
+import courses.Courses;
+import courses.Modules;
+import database.DBconnection;
+import users.Admin;
+
+
+import users.Student;
+import users.Tutor;
+
+
 import javax.swing.JScrollPane;
 import java.awt.CardLayout;
 import javax.swing.JTextField;
@@ -29,6 +47,7 @@ import javax.swing.Icon;
 public class dashboard {
 
 	JFrame frame;
+
 	private JTable table_2;
 	private JTextField courseSearch;
 	private JTextField studentSearch;
@@ -36,7 +55,16 @@ public class dashboard {
 	private Desktop desktop;
 	private CardLayout cardLayout = new CardLayout(0, 0);
 	private JTextField oldPassword;
-	private JTextField textField;
+	private JTextField newPassword;
+	private JTable table;
+	private JTable table_1;
+	private JTable table_3;
+	private JTable table_4;
+	private static String enteredEmail;
+	private static String selectedRole;
+
+	
+	
 
 
 	/**
@@ -47,7 +75,7 @@ public class dashboard {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					dashboard window = new dashboard();
+					dashboard window = new dashboard(selectedRole, enteredEmail);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +89,11 @@ public class dashboard {
 	 * @wbp.parser.entryPoint
 	 * @return 
 	 */
-	public dashboard() {
+	public dashboard(String selectedRole, String enteredEmail) {
+		
+		dashboard.selectedRole= selectedRole;
+		dashboard.enteredEmail = enteredEmail;
+		
 		initialize();
 	}
 
@@ -69,6 +101,8 @@ public class dashboard {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		
 		cardLayout = new CardLayout();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1360, 750);
@@ -172,25 +206,6 @@ public class dashboard {
 		lblDashboard.setBounds(306, 10, 177, 40);
 		headerPanel.add(lblDashboard);
 		
-		JPanel notiPanel = new JPanel();
-		notiPanel.setLayout(null);
-		notiPanel.setBounds(750, 63, 303, 630);
-		dashPanel.add(notiPanel);
-		
-		JLabel lblNewLabel_6 = new JLabel("Notification");
-		lblNewLabel_6.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_6.setBounds(0, 10, 121, 33);
-		notiPanel.add(lblNewLabel_6);
-		
-		JLabel lblNewLabel_7 = new JLabel("");
-		lblNewLabel_7.setIcon(new ImageIcon(getClass().getResource("/gui/images/notification.png")));
-		lblNewLabel_7.setBounds(118, 18, 25, 25);
-		notiPanel.add(lblNewLabel_7);
-		
-		JScrollPane notiscrollPane = new JScrollPane();
-		notiscrollPane.setBounds(0, 53, 303, 577);
-		notiPanel.add(notiscrollPane);
-		
 		JPanel totalCourses = new JPanel();
 		totalCourses.setBorder(UIManager.getBorder("CheckBox.border"));
 		totalCourses.setBounds(10, 75, 230, 167);
@@ -202,9 +217,10 @@ public class dashboard {
 		lblNewLabel.setBounds(10, 10, 147, 33);
 		totalCourses.add(lblNewLabel);
 		
-		JLabel totalCoursesCount = new JLabel("4");
+		Courses c = new Courses();
+		JLabel totalCoursesCount = new JLabel("" + c.getCourse().size());
 		totalCoursesCount.setFont(new Font("Garamond", Font.PLAIN, 61));
-		totalCoursesCount.setBounds(10, 53, 129, 104);
+		totalCoursesCount.setBounds(10, 53, 125, 104);
 		totalCourses.add(totalCoursesCount);
 		
 		JPanel totalTutor = new JPanel();
@@ -218,7 +234,8 @@ public class dashboard {
 		lblNewLabel_2.setBounds(10, 10, 140, 33);
 		totalTutor.add(lblNewLabel_2);
 		
-		JLabel totalTutorsCount = new JLabel("44");
+		Tutor t = new Tutor();
+		JLabel totalTutorsCount = new JLabel("" + t.gettutor().size());
 		totalTutorsCount.setFont(new Font("Garamond", Font.PLAIN, 61));
 		totalTutorsCount.setBounds(20, 53, 129, 104);
 		totalTutor.add(totalTutorsCount);
@@ -229,7 +246,9 @@ public class dashboard {
 		dashPanel.add(panel);
 		panel.setLayout(null);
 		
-		JLabel totalStudentsCount = new JLabel("44");
+		
+		Student s = new Student();
+		JLabel totalStudentsCount = new JLabel("" + s.getStudents().size());
 		totalStudentsCount.setFont(new Font("Garamond", Font.PLAIN, 61));
 		totalStudentsCount.setBounds(10, 54, 129, 104);
 		panel.add(totalStudentsCount);
@@ -258,13 +277,19 @@ public class dashboard {
 			}
 		));
 		
-		// Set the preferred width for the "ID" column
+		
 		table_2.getColumnModel().getColumn(0).setPreferredWidth(10);
-
-				// Set the preferred width for the "Activity" column
 		table_2.getColumnModel().getColumn(1).setPreferredWidth(610);	
-		table_2.setFont(new Font("Garamond", Font.PLAIN, 20)); // Adjust the size (e.g., 20)
-		table_2.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));  
+		table_2.setFont(new Font("Garamond", Font.PLAIN, 20));
+		table_2.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));
+		table_2.setRowHeight(27);
+		
+		DBconnection dbConnection = new DBconnection();
+		Connection connection = dbConnection.load();
+		
+		
+		activities activityManager = new activities(connection);
+		activityManager.displayActivities(table_2); 
 		
 		
 		
@@ -315,22 +340,133 @@ public class dashboard {
 		lblNewLabel_2_1.setIcon(new ImageIcon(getClass().getResource("/gui/images/search.png")));
 		
 		JButton addCoursebtn = new JButton("Add Course");
+		addCoursebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddCourse addCourse = new AddCourse();
+		        addCourse.frame.setVisible(true);
+			}
+		});
 		addCoursebtn.setFont(new Font("Garamond", Font.PLAIN, 21));
 		addCoursebtn.setBackground(SystemColor.textHighlightText);
 		addCoursebtn.setBounds(363, 10, 138, 37);
 		courseSearchPanel.add(addCoursebtn);
 		
+		if(selectedRole=="Admin") {
+			addCoursebtn.setVisible(true);
+		}else {
+			addCoursebtn.setVisible(false);
+		}
+		
 		JButton editCoursebtn = new JButton("Edit Course");
+		editCoursebtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditCourse editCourse = new EditCourse();
+				editCourse.frame.setVisible(true);
+			}
+		});
 		editCoursebtn.setFont(new Font("Garamond", Font.PLAIN, 21));
 		editCoursebtn.setBackground(SystemColor.textHighlightText);
 		editCoursebtn.setBounds(511, 10, 138, 37);
 		courseSearchPanel.add(editCoursebtn);
 		
+		if(selectedRole=="Admin") {
+			editCoursebtn.setVisible(true);
+		}else {
+			editCoursebtn.setVisible(false);
+		}
+		
 		JButton btnNewButton_3 = new JButton("Delete Course");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeleteCourse deleteCourse = new DeleteCourse();
+				deleteCourse.frame.setVisible(true);
+			}
+		});
 		btnNewButton_3.setFont(new Font("Garamond", Font.PLAIN, 21));
 		btnNewButton_3.setBackground(SystemColor.textHighlightText);
 		btnNewButton_3.setBounds(659, 10, 152, 37);
 		courseSearchPanel.add(btnNewButton_3);
+		
+		if(selectedRole=="Admin") {
+			btnNewButton_3.setVisible(true);
+		}else {
+			btnNewButton_3.setVisible(false);
+		}
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 180, 811, 183);
+		coursePanel.add(scrollPane_1);
+
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
+
+		DefaultTableModel model = new DefaultTableModel(
+		        new Object[][] {},
+		        new String[] {
+		                "ID", "Course Name"
+		        }
+		);
+
+		table.setModel(model);
+
+		table.getColumnModel().getColumn(0).setPreferredWidth(10);
+		table.getColumnModel().getColumn(1).setPreferredWidth(610);
+		table.setFont(new Font("Garamond", Font.PLAIN, 20));
+		table.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));
+		table.setRowHeight(30);
+		
+		for (int j = 0; j < c.getCourse().size(); j++) {
+		    model.addRow(new Object[]{c.getCourse().get(j).course_id, c.getCourse().get(j).course_name});
+		}
+		
+		
+		
+		JLabel lblNewLabel_6 = new JLabel("Courses:");
+		lblNewLabel_6.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_6.setBounds(9, 139, 101, 31);
+		coursePanel.add(lblNewLabel_6);
+		
+		JLabel lblNewLabel_7 = new JLabel("Modules:");
+		lblNewLabel_7.setFont(new Font("Garamond", Font.PLAIN, 24));
+		lblNewLabel_7.setBounds(10, 391, 100, 31);
+		coursePanel.add(lblNewLabel_7);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(10, 432, 811, 251);
+		coursePanel.add(scrollPane_2);
+
+		table_1 = new JTable();
+		scrollPane_2.setViewportView(table_1);
+		table_1.setModel(new DefaultTableModel(
+		        new Object[][] {
+		        },
+		        new String[] {
+		                "ID", "Module Name", "Course", "Type"
+		        }
+		));
+
+		// Set the preferred column widths
+		table_1.getColumnModel().getColumn(0).setPreferredWidth(10);
+		table_1.getColumnModel().getColumn(1).setPreferredWidth(300);
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(100);
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(100);
+
+		// Set the font for the table and table header
+		table_1.setFont(new Font("Garamond", Font.PLAIN, 20));
+		table_1.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));
+
+		// Set the row height
+		table_1.setRowHeight(30); // Adjust the value (e.g., 30) to your preferred row height
+
+		Modules m = new Modules();
+		DefaultTableModel model1 = (DefaultTableModel) table_1.getModel();
+		for (int j = 0; j < m.getModules().size(); j++) {
+		    model1.addRow(new Object[]{m.getModules().get(j).module_id, m.getModules().get(j).module_name,
+		            m.getModules().get(j).course_id, m.getModules().get(j).module_type});
+		}
+		
+		
+		
 		
 		JPanel studentPanel = new JPanel();
 		mainPanel.add(studentPanel, "name_81682433354600");
@@ -377,22 +513,90 @@ public class dashboard {
 		studentsearchPanel.add(studentSearch);
 		
 		JButton addCoursebtn_1 = new JButton("Edit Student");
+		addCoursebtn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditStudent editstudent = new EditStudent();
+				editstudent.frame.setVisible(true);
+			}
+		});
 		addCoursebtn_1.setFont(new Font("Garamond", Font.PLAIN, 21));
 		addCoursebtn_1.setBackground(SystemColor.textHighlightText);
 		addCoursebtn_1.setBounds(339, 10, 138, 37);
 		studentsearchPanel.add(addCoursebtn_1);
-		
+		if(selectedRole=="Admin") {
+			addCoursebtn_1.setVisible(true);
+		}else {
+			addCoursebtn_1.setVisible(false);
+		}		
 		JButton editCoursebtn_1 = new JButton("Delete Student");
+		editCoursebtn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeleteStudent deletestudent = new DeleteStudent();
+				deletestudent.frame.setVisible(true);
+			}
+		});
 		editCoursebtn_1.setFont(new Font("Garamond", Font.PLAIN, 19));
 		editCoursebtn_1.setBackground(SystemColor.textHighlightText);
 		editCoursebtn_1.setBounds(487, 10, 147, 37);
 		studentsearchPanel.add(editCoursebtn_1);
+		if(selectedRole=="Admin") {
+			editCoursebtn_1.setVisible(true);
+		}else {
+			editCoursebtn_1.setVisible(false);
+		}
 		
 		JButton btnNewButton_3_1 = new JButton("View Progress");
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewProgress viewprogress = new ViewProgress();
+				viewprogress.frame.setVisible(true);
+			}
+		});
 		btnNewButton_3_1.setFont(new Font("Garamond", Font.PLAIN, 21));
 		btnNewButton_3_1.setBackground(SystemColor.textHighlightText);
 		btnNewButton_3_1.setBounds(644, 10, 152, 37);
 		studentsearchPanel.add(btnNewButton_3_1);
+		if(selectedRole=="Admin") {
+			btnNewButton_3_1.setVisible(true);
+		}else {
+			btnNewButton_3_1.setVisible(false);
+		}
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(10, 157, 806, 511);
+		studentPanel.add(scrollPane_4);
+
+		table_3 = new JTable();
+		scrollPane_4.setViewportView(table_3);
+		table_3.setModel(new DefaultTableModel(
+		        new Object[][] {
+		        },
+		        new String[] {
+		                "ID", "Name", "Email", "Phone"
+		        }
+		));
+
+		
+		table_3.getColumnModel().getColumn(0).setPreferredWidth(10);
+		table_3.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table_3.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table_3.getColumnModel().getColumn(3).setPreferredWidth(150);
+
+		
+		table_3.setFont(new Font("Garamond", Font.PLAIN, 20));
+		table_3.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));
+
+		
+		table_3.setRowHeight(30); 
+
+		
+		DefaultTableModel studentTable = (DefaultTableModel) table_3.getModel();
+		for (int j = 0; j < s.getStudents().size(); j++) {
+		    studentTable.addRow(new Object[]{s.getStudents().get(j).id, s.getStudents().get(j).name,
+		            s.getStudents().get(j).email, s.getStudents().get(j).phone});
+		}
+
+
 		
 		JPanel setingsPanel = new JPanel();
 		mainPanel.add(setingsPanel, "name_81696700830100");
@@ -422,99 +626,65 @@ public class dashboard {
 		lblSettings.setBounds(306, 10, 177, 40);
 		headerPanel_4.add(lblSettings);
 		
-		JLabel lblNewLabel_5 = new JLabel("General Profile");
-		lblNewLabel_5.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_5.setBounds(10, 70, 154, 34);
-		setingsPanel.add(lblNewLabel_5);
-		
-		JLabel lblNewLabel_8 = new JLabel("First Name:");
-		lblNewLabel_8.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_8.setBounds(10, 131, 112, 27);
-		setingsPanel.add(lblNewLabel_8);
-		
-		JLabel FirstName = new JLabel("");
-		FirstName.setBackground(new Color(255, 250, 250));
-		FirstName.setFont(new Font("Garamond", Font.PLAIN, 24));
-		FirstName.setBounds(139, 131, 213, 27);
-		setingsPanel.add(FirstName);
-		FirstName.setBorder(UIManager.getBorder("ToolTip.border"));
-		
-		JLabel lblNewLabel_9 = new JLabel("Email:");
-		lblNewLabel_9.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_9.setBounds(10, 198, 93, 27);
-		setingsPanel.add(lblNewLabel_9);
-		
-		JLabel email = new JLabel("");
-		email.setFont(new Font("Garamond", Font.PLAIN, 24));
-		email.setBounds(139, 198, 213, 27);
-		setingsPanel.add(email);
-		email.setBorder(UIManager.getBorder("ToolTip.border"));
-		
-		JLabel lblNewLabel_10 = new JLabel("Last Name:");
-		lblNewLabel_10.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_10.setBounds(505, 131, 123, 27);
-		setingsPanel.add(lblNewLabel_10);
-		
-		JLabel LastName = new JLabel("");
-		LastName.setFont(new Font("Garamond", Font.PLAIN, 24));
-		LastName.setBounds(637, 131, 213, 29);
-		setingsPanel.add(LastName);
-		LastName.setBorder(UIManager.getBorder("ToolTip.border"));
-		
-		JLabel lblNewLabel_11 = new JLabel("Phone No.");
-		lblNewLabel_11.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_11.setBounds(505, 198, 103, 27);
-		setingsPanel.add(lblNewLabel_11);
-		
-		JLabel PhoneNo = new JLabel("");
-		PhoneNo.setFont(new Font("Garamond", Font.PLAIN, 24));
-		PhoneNo.setBounds(637, 198, 213, 27);
-		setingsPanel.add(PhoneNo);
-		PhoneNo.setBorder(UIManager.getBorder("ToolTip.border"));
-		
-		JButton editProfile = new JButton("Edit Profile");
-		editProfile.setFont(new Font("Garamond", Font.PLAIN, 21));
-		editProfile.setBounds(10, 259, 143, 34);
-		setingsPanel.add(editProfile);
-		
 		JLabel lblNewLabel_12 = new JLabel("Security & Login");
 		lblNewLabel_12.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_12.setBounds(10, 324, 169, 34);
+		lblNewLabel_12.setBounds(10, 70, 169, 34);
 		setingsPanel.add(lblNewLabel_12);
 		
 		JLabel lblNewLabel_13 = new JLabel("Old Password:");
 		lblNewLabel_13.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_13.setBounds(10, 392, 143, 27);
+		lblNewLabel_13.setBounds(10, 152, 143, 27);
 		setingsPanel.add(lblNewLabel_13);
-		
-		oldPassword = new JTextField();
-		oldPassword.setBounds(166, 392, 234, 27);
+
+		oldPassword = new JPasswordField();
+		oldPassword.setBounds(171, 152, 234, 27);
 		setingsPanel.add(oldPassword);
-		oldPassword.setColumns(10);
-		
+
 		JLabel lblNewLabel_14 = new JLabel("New Password:");
 		lblNewLabel_14.setFont(new Font("Garamond", Font.PLAIN, 24));
-		lblNewLabel_14.setBounds(505, 392, 154, 27);
+		lblNewLabel_14.setBounds(480, 152, 154, 27);
 		setingsPanel.add(lblNewLabel_14);
-		
-		textField = new JTextField();
-		textField.setBounds(669, 392, 234, 27);
-		setingsPanel.add(textField);
-		textField.setColumns(10);
-		
-		JButton changePassword = new JButton("Change Password");
-		changePassword.setFont(new Font("Garamond", Font.PLAIN, 21));
-		changePassword.setBounds(10, 452, 197, 27);
-		setingsPanel.add(changePassword);
+
+		newPassword = new JPasswordField();
+		newPassword.setBounds(644, 152, 234, 27);
+		setingsPanel.add(newPassword);
+
+		JButton changePasswordbtn = new JButton("Change Password");
+		changePasswordbtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String newPass = new String(((JPasswordField) newPassword).getPassword());
+				String oldPass = new String(((JPasswordField) oldPassword).getPassword());
+				Admin a = new Admin();
+				if(selectedRole=="Student") {
+					s.changePassword(enteredEmail, oldPass, newPass);
+				 } else if(selectedRole=="Tutor"){
+					 t.changePassword(enteredEmail, oldPass, newPass);
+				 }else if(selectedRole=="Admin") {
+					 a.changePassword(enteredEmail, oldPass, newPass);
+				 }
+			}
+		});
+		changePasswordbtn.setFont(new Font("Garamond", Font.PLAIN, 21));
+		changePasswordbtn.setBounds(10, 215, 197, 27);
+		setingsPanel.add(changePasswordbtn);
+
+
 		
 		JButton btnNewButton = new JButton("Create Student Report");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				GenerateReport generatereport = new GenerateReport();
+				generatereport.frame.setVisible(true);
 			}
 		});
 		btnNewButton.setFont(new Font("Garamond", Font.PLAIN, 22));
-		btnNewButton.setBounds(10, 502, 241, 34);
+		btnNewButton.setBounds(10, 297, 241, 34);
 		setingsPanel.add(btnNewButton);
+		if(selectedRole=="Tutor") {
+			btnNewButton.setVisible(true);
+		}else {
+			btnNewButton.setVisible(false);
+		}
 		
 		JPanel tutorPanel = new JPanel();
 		mainPanel.add(tutorPanel, "name_81912417026100");
@@ -561,21 +731,93 @@ public class dashboard {
 		tutorSearchPanel.add(tutorSearch);
 		
 		JButton addCoursebtn_2 = new JButton("Add Tutor");
+		addCoursebtn_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddTutor addtutor = new AddTutor();
+				addtutor.frame.setVisible(true);
+			}
+		});
 		addCoursebtn_2.setFont(new Font("Garamond", Font.PLAIN, 21));
 		addCoursebtn_2.setBackground(SystemColor.textHighlightText);
 		addCoursebtn_2.setBounds(350, 10, 138, 37);
 		tutorSearchPanel.add(addCoursebtn_2);
+		if(selectedRole=="Admin") {
+			addCoursebtn_2.setVisible(true);
+		}else {
+			addCoursebtn_2.setVisible(false);
+		}
 		
 		JButton editCoursebtn_2 = new JButton("Edit Tutor");
+		editCoursebtn_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				EditTutor edittutor = new EditTutor();
+				edittutor.frame.setVisible(true);
+			}
+		});
 		editCoursebtn_2.setFont(new Font("Garamond", Font.PLAIN, 21));
 		editCoursebtn_2.setBackground(SystemColor.textHighlightText);
 		editCoursebtn_2.setBounds(498, 10, 138, 37);
 		tutorSearchPanel.add(editCoursebtn_2);
+		if(selectedRole=="Admin") {
+			editCoursebtn_2.setVisible(true);
+		}else {
+			editCoursebtn_2.setVisible(false);
+		}
 		
 		JButton btnNewButton_3_2 = new JButton("Delete Tutor");
+		btnNewButton_3_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeleteTutor deletetutor = new DeleteTutor();
+				deletetutor.frame.setVisible(true);
+			}
+		});
 		btnNewButton_3_2.setFont(new Font("Garamond", Font.PLAIN, 21));
 		btnNewButton_3_2.setBackground(SystemColor.textHighlightText);
 		btnNewButton_3_2.setBounds(646, 10, 152, 37);
 		tutorSearchPanel.add(btnNewButton_3_2);
+		if(selectedRole=="Admin") {
+			btnNewButton_3_2.setVisible(true);
+		}else {
+			btnNewButton_3_2.setVisible(false);
+		}
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(10, 152, 798, 541);
+		tutorPanel.add(scrollPane_3);
+
+		table_4 = new JTable();
+		scrollPane_3.setViewportView(table_4);
+		table_4.setModel(new DefaultTableModel(
+		        new Object[][] {
+		        },
+		        new String[] {
+		                "ID", "Name", "Email", "Phone"
+		        }
+		));
+
+		// Set the preferred column widths
+		table_4.getColumnModel().getColumn(0).setPreferredWidth(10);
+		table_4.getColumnModel().getColumn(1).setPreferredWidth(200);
+		table_4.getColumnModel().getColumn(2).setPreferredWidth(200);
+		table_4.getColumnModel().getColumn(3).setPreferredWidth(150);
+
+		// Set the font for the table and table header
+		table_4.setFont(new Font("Garamond", Font.PLAIN, 20));
+		table_4.getTableHeader().setFont(new Font("Garamond", Font.BOLD, 20));
+
+		// Set the row height
+		table_4.setRowHeight(30); // Adjust the value (e.g., 30) to your preferred row height
+
+		// Populate the table with data
+		DefaultTableModel tutorTable = (DefaultTableModel) table_4.getModel();
+		for (int j = 0; j < t.gettutor().size(); j++) {
+		    tutorTable.addRow(new Object[]{t.gettutor().get(j).id, t.gettutor().get(j).name,
+		            t.gettutor().get(j).email, t.gettutor().get(j).phone});
+		}
+		
+		
+
 	}
+	
+	
 }
