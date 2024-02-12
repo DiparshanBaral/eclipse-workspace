@@ -240,35 +240,35 @@ public class dashboard {
 		totalTutorsCount.setBounds(20, 53, 129, 104);
 		totalTutor.add(totalTutorsCount);
 		
-		JPanel panel = new JPanel();
-		panel.setBorder(UIManager.getBorder("CheckBox.border"));
-		panel.setBounds(500, 74, 230, 168);
-		dashPanel.add(panel);
-		panel.setLayout(null);
+		JPanel totalStudents = new JPanel();
+		totalStudents.setBorder(UIManager.getBorder("CheckBox.border"));
+		totalStudents.setBounds(500, 74, 230, 168);
+		dashPanel.add(totalStudents);
+		totalStudents.setLayout(null);
 		
 		
 		Student s = new Student();
 		JLabel totalStudentsCount = new JLabel("" + s.getStudents().size());
 		totalStudentsCount.setFont(new Font("Garamond", Font.PLAIN, 61));
 		totalStudentsCount.setBounds(10, 54, 129, 104);
-		panel.add(totalStudentsCount);
+		totalStudents.add(totalStudentsCount);
 		
 		JLabel lblNewLabel_3 = new JLabel("Total Students:");
 		lblNewLabel_3.setFont(new Font("Garamond", Font.PLAIN, 24));
 		lblNewLabel_3.setBounds(10, 10, 154, 34);
-		panel.add(lblNewLabel_3);
+		totalStudents.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("Activities History");
 		lblNewLabel_4.setFont(new Font("Garamond", Font.PLAIN, 24));
 		lblNewLabel_4.setBounds(10, 276, 182, 37);
 		dashPanel.add(lblNewLabel_4);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 323, 733, 360);
-		dashPanel.add(scrollPane);
+		JScrollPane activityTable = new JScrollPane();
+		activityTable.setBounds(10, 323, 733, 360);
+		dashPanel.add(activityTable);
 		
 		table_2 = new JTable();
-		scrollPane.setViewportView(table_2);
+		activityTable.setViewportView(table_2);
 		table_2.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -393,12 +393,12 @@ public class dashboard {
 			btnNewButton_3.setVisible(false);
 		}
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 180, 811, 183);
-		coursePanel.add(scrollPane_1);
+		JScrollPane coursesTable = new JScrollPane();
+		coursesTable.setBounds(10, 180, 811, 183);
+		coursePanel.add(coursesTable);
 
 		table = new JTable();
-		scrollPane_1.setViewportView(table);
+		coursesTable.setViewportView(table);
 
 		DefaultTableModel model = new DefaultTableModel(
 		        new Object[][] {},
@@ -431,12 +431,12 @@ public class dashboard {
 		lblNewLabel_7.setBounds(10, 391, 100, 31);
 		coursePanel.add(lblNewLabel_7);
 		
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(10, 432, 811, 251);
-		coursePanel.add(scrollPane_2);
+		JScrollPane modulesTable = new JScrollPane();
+		modulesTable.setBounds(10, 432, 811, 251);
+		coursePanel.add(modulesTable);
 
 		table_1 = new JTable();
-		scrollPane_2.setViewportView(table_1);
+		modulesTable.setViewportView(table_1);
 		table_1.setModel(new DefaultTableModel(
 		        new Object[][] {
 		        },
@@ -558,8 +558,10 @@ public class dashboard {
 		studentsearchPanel.add(btnNewButton_3_1);
 		if(selectedRole=="Admin") {
 			btnNewButton_3_1.setVisible(true);
-		}else {
+		}else if(selectedRole == "Tutor") {
 			btnNewButton_3_1.setVisible(false);
+		}else if(selectedRole == "Student") {
+			btnNewButton_3_1.setVisible(true);
 		}
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
@@ -781,12 +783,12 @@ public class dashboard {
 			btnNewButton_3_2.setVisible(false);
 		}
 		
-		JScrollPane scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(10, 152, 798, 541);
-		tutorPanel.add(scrollPane_3);
+		JScrollPane tutorsTable = new JScrollPane();
+		tutorsTable.setBounds(10, 152, 798, 541);
+		tutorPanel.add(tutorsTable);
 
 		table_4 = new JTable();
-		scrollPane_3.setViewportView(table_4);
+		tutorsTable.setViewportView(table_4);
 		table_4.setModel(new DefaultTableModel(
 		        new Object[][] {
 		        },

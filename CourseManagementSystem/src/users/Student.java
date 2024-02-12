@@ -22,25 +22,7 @@ public class Student extends User {
         super(id, name, email, phone);
     }
 
-    // students
-    public void studentRegister(String s_name, int c_id, String s_email, String s_pass, String s_phone, int lvl) {
-        String insert = "INSERT INTO students (student_name, course_id, student_email, student_password, student_phone, level) VALUES(?,?,?,?,?,?) ";
-        try {
-            PreparedStatement state = connect.prepareStatement(insert);
-            state.setString(1, s_name);
-            state.setString(2, String.valueOf(c_id));
-            state.setString(3, s_email);
-            state.setString(4, s_pass);
-            state.setString(5, s_phone);
-            state.setString(6, String.valueOf(lvl));
-            state.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Account created successfully");
-            state.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Unable To Register!!!");
-            System.out.println(e);
-        }
-    }
+    
 
     public ArrayList<Student> getStudents() {
         String query = "SELECT * FROM students";
@@ -110,24 +92,6 @@ public class Student extends User {
 
     
 
-    public ArrayList<String> moduleEnrollment(String email) {
-        String query = "SELECT students.student_id, students.student_name, modules.module_id, modules.module_name FROM students JOIN enrollments ON students.student_id = enrollments.student_id JOIN modules ON enrollments.module_id = modules.module_id WHERE students.student_email = ?";
-        ArrayList<String> students = new ArrayList<String>();
-        try {
-            PreparedStatement state = connect.prepareStatement(query);
-            state.setString(1, String.valueOf(email));
-            ResultSet set = state.executeQuery();
-            while (set.next()) {
-                students.add(set.getString("module_name"));
-            }
-
-            state.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Something went wrong!",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        return students;
-    }
 
   
 
